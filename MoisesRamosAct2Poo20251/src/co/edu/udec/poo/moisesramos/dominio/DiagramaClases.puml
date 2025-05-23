@@ -1,0 +1,137 @@
+@startuml
+Class Empleado{
+    -NecesitaCRUD-OK
+    -Int id;
+    -String nombre;
+    -String apellido;
+    -String telefono;
+    -String direccion;
+    -String cuentaBancaria;
+    -List<contrato> contratos;
+    -ArrayList<Cargo> cargos;
+
+    +Double calcularSalarioBruto();
+    +Contrato getContratoActivo();
+}
+
+Class Contrato{
+    -NecesitaCRUD-OK
+    -Int idContrato;
+    -Date fechaAlta;
+    -Date fechaBaja;
+    -Boolean activo;
+    +Int calcularAntiguedad();
+}
+
+Class PuestoDestino{
+    -ENUM
+    -Int idPuesto;
+    -String nombre;
+    -String descripcion;
+    -List<complento> complementos; 
+    +List<Complemento> getComplementos();
+}
+
+Class Categoria{
+    -ENUM
+    -Int idCategoria;
+    -String nombre;
+    -Double salarioBase;
+    -Double porcentajeTrienio;
+    +Double getSalarioBase();
+}
+
+Class Complemento{
+    -ENUM
+    -Int idComplemento;
+    -String tipo;
+    -String descripcion;
+    -Double valor;
+    -Boolean temporal;
+    -Date fechaInicio;
+    -Date fechaFin;
+}
+
+Class Trienio{
+    -ENUM
+    -Int idTrienio;
+    -Date fechaInicio;
+    -Date fechaFin;
+    -Double valor;
+    +Double  calcularValor();
+}
+
+Class Cargo{
+    -NecesitaCRUD-OK
+    -Int idCargo;
+    -String nombre;
+    -String descripcion;
+    -Double complemento;
+    -Date fechaInicio;
+    -Date fechaFin;
+    +Double getComplemento();
+}
+
+Class Nomina{
+    -NecesitaCRUD-OK
+    -Int idNomina;
+    -Date fechaEmision;
+    -String periodo;
+    -Double salarioBruto;
+    -Double deducciones;
+    -Double salarioNeto;
+    +Void calcularNomina();
+
+    +DiasAPagar
+    +NovedadesYConceptos
+    +NominaCRUD metodoCalcularDeduccion
+}
+
+Class NominaTotal{
+    -NecesitaCRUD-OK
+    - Int idNominaTotal
+    +HistorialNomina
+}
+
+Class Deduccion{
+    -NecesitaCRUD
+    -ArrayList PorTamos
+    -Arraylist fijas
+
+    -Int idDeduccion;
+    -TipoDeduccion tipo;
+    -Double valor;
+    -String descripcion;
+    +Double calcularDeduccion();
+}
+
+Class TipoDeduccion{
+    -Int idTipoDeduccion;
+    -String nombre;
+    -Boolean esPorTramos;
+    +Double getPorcentaje(salarioBruto);
+}
+
+Class TramoDeduccion{
+    -Int idTramoDeduccion;
+    -Double limiteInferior;
+    -Double limiteSuperior;
+    -Double porcentaje;
+    +Boolean aplicaPara(salarioBruto);
+    +Double getPorcentaje();
+}
+
+' Relaciones
+
+Empleado "1" -- "*" Contrato : Tiene
+Contrato "*" -- "1" Categoria : Comparten
+Contrato "*" -- "1" PuestoDestino : Tiene
+PuestoDestino "1" -- "*" Complemento : Pertenece
+Empleado "1" -- "*" Trienio : Puede acumular
+Empleado "1" -- "*" Cargo : Puede tener
+Empleado "1" -- "*" Nomina :Tiene
+Nomina "1" -- "*" Deduccion : Contine
+Nomina "1" -- "1" NominaTotal: Tiene
+@enduml
+Deduccion "*" -- "1" TipoDeduccion : Tiene
+TipoDeduccion "1" -- "*" TramoDeduccion :Puede tener
