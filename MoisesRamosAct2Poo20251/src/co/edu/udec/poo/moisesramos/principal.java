@@ -18,7 +18,7 @@ import java.util.Scanner;
 /**
  *
  * @author M. Alejandro
- * hola
+ * hola hola
  */
 public class principal {
 
